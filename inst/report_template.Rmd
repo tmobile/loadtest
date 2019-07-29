@@ -1,0 +1,81 @@
+---
+title: "Performance testing"
+output: html_document
+date: "`r Sys.Date()`"
+params: 
+  results: "`r data.frame()`"
+---
+
+```{r setup, include=FALSE}
+# =========================================================================
+# Copyright © 2019 T-Mobile USA, Inc.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# =========================================================================
+
+knitr::opts_chunk$set(echo = FALSE, dpi=300, error=TRUE, warning=TRUE, message=FALSE)
+library(loadtest)
+```
+
+## Configuration
+
+### Request
+
+__URL:__ `r attr(params$results,"config")$url`
+
+__Method:__ `r attr(results,"config")$method`
+
+```{r show_headers, results="asis", echo=FALSE}
+if(!is.null(attr(results,"config")$headers)){
+  cat("__Headers:__\n\n")
+  header_table <- data.frame(key = names(attr(results,"config")$headers), value = attr(results,"config")$headers, stringsAsFactors = FALSE)
+  header_table$key <- paste0("`",header_table$key,"`")
+  header_table$value <- paste0("`",header_table$value,"`")
+  rownames(header_table) <- NULL
+  print(knitr::kable(header_table))
+}
+```
+
+```{r show_body, results="asis", echo=FALSE}
+if(!is.null(attr(results,"config")$body)){
+  cat("__Body:__\n\n")
+  cat("```json\n")
+  cat(jsonlite::toJSON(attr(results,"config")$body,auto_unbox=TRUE))
+  cat("\n```\n\n")
+}
+```
+
+### Test
+
+* Number of threads: `r max(params$results$thread)`
+* Number of loops per thread: `r nrow(params$results)/max(params$results$thread)`
+* Total number of requests: `r nrow(params$results)`
+* Number of failed results: `r sum(params$results$request_status == "Failure")`
+
+```{r failed_tests, results="asis"}
+if(sum(params$results$request_status == "Failure") > 0){
+  cat("<div class=\"alert alert-danger\" role=\"alert\"> Warning: requests failed!</div>\n\n")
+}
+```
+## Results
+
+* Runtime: `r round((max(params$results$time_since_start) + results$elapsed[which.max(results$start_time)])/1000,3)` seconds
+* Response speed: `r nrow(params$results)/(max(params$results$time_since_start) + results$elapsed[which.max(results$start_time)])*1000` requests per second
+* Mean response time: `r mean(params$results$elapsed)` seconds
+
+```{r plot_results, echo=FALSE}
+loadtest::plot_elapsed_times(params$results)
+loadtest::plot_elapsed_times_histogram(params$results)
+loadtest::plot_requests_by_thread(params$results)
+loadtest::plot_requests_per_second(params$results)
+```

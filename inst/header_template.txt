@@ -1,0 +1,4 @@
+<elementProp name="" elementType="Header">
+  <stringProp name="Header.name">{name}</stringProp>
+  <stringProp name="Header.value">{value}</stringProp>
+</elementProp>

@@ -1,0 +1,20 @@
+Package: loadtest
+Type: Package
+Title: HTTP load testing directly from R
+Version: 0.1.1.9000
+Author@R: person("Jacqueline", "Nolis", email = "jacqueline.nolis2@t-mobile.com", role = c("aut", "cre"))
+Description: This package allows you to run a load test of an HTTP request, such as for an R plumber REST API, from within R
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+  glue (>= 1.3.1),
+  jsonlite (>= 1.6)
+RoxygenNote: 6.1.1
+Suggests: 
+    testthat,
+    rmarkdown,
+    ggplot2,
+    dplyr,
+    tidyr
+SystemRequirements: Both Java 8+ and Apache JMeter are installed and available directly in the user path.
