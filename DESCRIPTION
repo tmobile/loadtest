@@ -17,4 +17,4 @@ Suggests:
     ggplot2,
     dplyr,
     tidyr
-SystemRequirements: Both Java 8+ and Apache JMeter are installed and available directly in the user path.
+SystemRequirements: Both Java 8+ and Apache JMeter are installed

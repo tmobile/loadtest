@@ -81,14 +81,16 @@ _*While Java is required for loadtest, the package rJava is not needed._
 
 To install Java, go to the [Oracle website](https://java.com/en/download/help/download_options.xml) and follow their instructions. 
 
-_Be sure that the Java path is directly available to the system follow the directions [here](https://www.java.com/en/download/help/path.xml)_
-
 You can test you have Java correctly installed by opening a terminal and running `java -version`.
 
 ### Installing JMeter
 Then, you need to download [Apache JMeter](https://jmeter.apache.org/download_jmeter.cgi), and extract the zip file to a folder. That folder needs to be added to the system path, just like for Java.
 
-You can test you have Apache JMeter correctly installed by opening a terminal and running `jmeter --version`. If you get an error that jmeter doesn't exist, the path was likely not set correctly.
+You can test you have Apache JMeter correctly installed by opening a terminal and running `jmeter --version`. If you get an error that JMeter doesn't exist, the path was likely not set correctly. You can manually specify the path to get to JMeter from within R by using:
+
+```r
+Sys.setenv("LOADTEST_JMETER_PATH"="[path to jmeter bin folder]")
+```
 
 ### Installing loadtest
 
