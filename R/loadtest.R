@@ -64,10 +64,10 @@ parse_url <- function(url){
 #' a body, you can specify them as well.
 #'
 #' @param url The url to hit as part of the test
-#' @param num_threads The number of threads to concurrently run in the test
-#' @param num_loops The number of times each thread should hit the endpoint
+#' @param threads The number of threads to concurrently run in the test
+#' @param loops The number of times each thread should hit the endpoint
 #' @param ramp_time the time (in seconds) that it should take before all threads are firing
-#' @param delay_between_requests a delay (in milliseconds) after a thread completes before it should make its next request
+#' @param delay_per_request a delay (in milliseconds) after a thread completes before it should make its next request
 #' @param body a list to be encoded as a json object to use as the body of the HTTP request
 #' @param headers a named character vector of headers to use as part of HTTP request. The names are the keys and the vector contents are the values.
 #' @return A data.frame containing the JMeter test results of the HTTP requests made during the tests. The columns
@@ -76,7 +76,7 @@ parse_url <- function(url){
 #'   \item{request_id}{An intentifier for each request. An integer from 1 to the number of requests/}
 #'   \item{start_time}{The time the request was started, as a POSIXct.}
 #'   \item{thread}{The thread the request was made from (from 1 to n, where n is the number of threads)}
-#'   \item{num_threads}{The number of open threads at the time the request was made. Should decrease to 1 as the requests finish.}
+#'   \item{threads}{The number of open threads at the time the request was made. Should decrease to 1 as the requests finish.}
 #'   \item{response_code}{The response code of the HTTP request, such as 200, 403, or 500.
 #'   A character that should be able to be converted to an integer, but may be a string be if an error occurred.}
 #'   \item{response_message}{The message of the response. May be an error if the request fails.}
@@ -96,20 +96,20 @@ parse_url <- function(url){
 #' }
 #'
 #' @examples
-#' results <- loadtest(url = "https://www.google.com", method="GET", num_threads = 3, num_loops = 5)
-#' results <- loadtest(url = "http://pets.nolisllc.com/names", method="GET", num_threads = 1, num_loops = 15)
+#' results <- loadtest(url = "https://www.google.com", method="GET", threads = 3, loops = 5)
+#' results <- loadtest(url = "http://pets.nolisllc.com/names", method="GET", threads = 1, loops = 15)
 #' @export
 loadtest <- function(url,
                        method,
                        headers = NULL,
                        body = NULL,
-                       num_threads = 1,
-                       num_loops = 16,
+                       threads = 1,
+                       loops = 16,
                        ramp_time = 0,
-                       delay_between_requests = 0){
+                       delay_per_request = 0){
 
-  invisible(loadtest:::check_java_installed())
-  invisible(loadtest:::check_jmeter_installed())
+  invisible(check_java_installed())
+  invisible(check_jmeter_installed())
 
   # set up the test specification file ---------------------
   parsed_url <- parse_url(url)
@@ -122,9 +122,9 @@ loadtest <- function(url,
     readChar(file_name, file.info(file_name)$size)
   }
 
-  template <- read_file_as_char(system.file("template.jmx", package = "jmetr")) # tempate for the full request
-  header_template <- read_file_as_char(system.file("header_template.txt", package = "jmetr")) # template for each request header
-  body_template <- read_file_as_char(system.file("body_template.txt", package = "jmetr")) # template for the request body, if one is needed
+  template <- read_file_as_char(system.file("template.jmx", package = "loadtest")) # tempate for the full request
+  header_template <- read_file_as_char(system.file("header_template.txt", package = "loadtest")) # template for each request header
+  body_template <- read_file_as_char(system.file("body_template.txt", package = "loadtest")) # template for the request body, if one is needed
 
 
   original_headers <- headers
@@ -158,7 +158,7 @@ loadtest <- function(url,
 
   # run the test -----------------------------
 
-  system2("jmeter",args=c("-n","-t",spec_location,"-l",save_location), stdout="")
+  system2(jmeter_path(),args=c("-n","-t",spec_location,"-l",save_location), stdout="")
 
   # read back in the results as a data frame -------------------------------
   output <- read.csv(save_location,
@@ -181,14 +181,14 @@ loadtest <- function(url,
                               Connect = "numeric"
                             ))
   names(output) <- c("start_time", "elapsed", "response_code","response_message", "thread",
-                     "request_status", "received_bytes", "sent_bytes", "num_threads", "latency", "idle", "connect")
+                     "request_status", "received_bytes", "sent_bytes", "threads", "latency", "idle", "connect")
 
   output[["start_time"]] <- as.POSIXct(output[["start_time"]]/1000, origin="1970-01-01")
   output[["time_since_start"]] <- round(as.numeric(output[["start_time"]]-min(output[["start_time"]]))*1000)
   output[["thread"]] <- as.integer(gsub("^Thread Group 1-", "", output[["thread"]]))
   output[["request_id"]] <- 1:nrow(output)
   output[["request_status"]] <- factor(ifelse(output[["request_status"]],"Success","Failure"),c("Failure","Success"))
-  output <- output[,c("request_id", "start_time", "thread", "num_threads", "response_code", "response_message",
+  output <- output[,c("request_id", "start_time", "thread", "threads", "response_code", "response_message",
                       "request_status", "sent_bytes", "received_bytes", "time_since_start", "elapsed", "latency", "connect", "idle")]
 
   attr(output, "config") <- list(url=url,

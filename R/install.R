@@ -28,38 +28,74 @@
 NULL
 
 
+#' Command for the jmeter executable
+#'
+#' The command to call to run jmeter. Usually just "jmeter",
+#' but you can use Sys.setenv("LOADTEST_JMETER_PATH") to specify the location if
+#' jmeter isn't in the path environment variable
+#'
+#' @return A string with the command to run for jmeter
+jmeter_path <- function(){
+  jmeter_env_path = Sys.getenv("LOADTEST_JMETER_PATH")
+  if(jmeter_env_path != ""){
+    jmeter_env_path
+  } else {
+    "jmeter"
+  }
+}
+
+#' Command for the java executable
+#'
+#' The command to call java. Usually just "java",
+#' but you can use Sys.setenv("LOADTEST_JAVA_PATH") to specify the location if
+#' java isn't in the path environment variable. This is only used for checking
+#' that the package should work when loaded, so it's not important to change unless you hate the warning
+#' any circumstance.
+#'
+#' @return A string with the command to run for jmeter
+java_path <- function(){
+  java_env_path = Sys.getenv("LOADTEST_JAVA_PATH")
+  if(java_env_path != ""){
+    java_env_path
+  } else {
+    "java"
+  }
+}
+
+
 check_java_installed <- function(){
   tryCatch({
-    version <- system2("java","-version", stdout=TRUE, stderr=TRUE)
-    if(length(version) == 0){
-      warning("Unable to check if Java installed")
+    if(!nzchar(Sys.which("java"))){
+      warning("Unable to find Java installation. https://github.com/tmobile/loadtest#installation")
       FALSE
     } else {
+      version <- system2(java_path(),"-version", stdout=TRUE, stderr=TRUE)
       version <- regmatches(version[1],regexec("^java version \"([0-9\\.]+)\"", version[1]))[[1]][2]
       main_version <- as.numeric(regmatches(version[1],regexec("^([0-9]+).", version[1]))[[1]][2])
       if(main_version < 8){
-        stop("Java must be version 8+")
+        warning("Java installation found but not version 8+. https://github.com/tmobile/loadtest#installation")
+        FALSE
+      } else {
+        TRUE
       }
-      TRUE
-    }
 
+    }
   }, error = function(e){
-    stop("Java missing or incorrectly installed")
+    warning("Unable to find Java installation. https://github.com/tmobile/loadtest#installation")
   })
   TRUE
 }
 
 check_jmeter_installed <- function(){
   tryCatch({
-    version <- system2("jmeter","--version", stdout=TRUE, stderr=TRUE)
-    if(length(version) == 0){
-      warning("Unable to check if JMeter installed")
+    if(!nzchar(Sys.which(jmeter_path()))){
+      warning("Unable to find JMeter installation. https://github.com/tmobile/loadtest#installation")
       FALSE
     } else {
       TRUE
     }
   }, error = function(e){
-    stop("JMeter missing or incorrectly installed")
+    warning("Unable to find JMeter installation. https://github.com/tmobile/loadtest#installation")
   })
   TRUE
 }

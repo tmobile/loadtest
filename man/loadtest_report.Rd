@@ -15,6 +15,6 @@ loadtest_report(results, output_file)
 This function uses R markdown to take the results of a jmeter run and turn it
 }
 \examples{
-results <- loadtest(url = "https://www.google.com", method="GET", num_threads = 3, num_loops = 5)
+results <- loadtest(url = "https://www.google.com", method="GET", threads = 3, loops = 5)
 loadtest_report(results,"~/report.html")
 }

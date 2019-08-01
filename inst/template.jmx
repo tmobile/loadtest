@@ -16,9 +16,9 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">{num_loops}</stringProp>
+          <stringProp name="LoopController.loops">{loops}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">{num_threads}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">{threads}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">{ramp_time}</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -34,7 +34,7 @@
           <stringProp name="HTTPSampler.path">{path}</stringProp>
           <stringProp name="HTTPSampler.method">{method}</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">true</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
@@ -50,7 +50,7 @@
           <hashTree/>
         </hashTree>
         <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Pause Between Requests" enabled="true">
-          <stringProp name="ConstantTimer.delay">0</stringProp>
+          <stringProp name="ConstantTimer.delay">{delay_per_request}</stringProp>
         </ConstantTimer>
         <hashTree/>
         <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">

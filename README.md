@@ -13,21 +13,21 @@ This package has a single primary function `loadtest` used to run a load test ag
 ```r
 library(loadtest)
 
-results <- loadtest(url = "https://www.google.com", method = "GET", num_threads = 5, num_loops = 10)
+results <- loadtest(url = "https://www.google.com", method = "GET", threads = 5, loops = 10)
 
 head(results)
 ```
 
 <div style="width: 100%; overflow: auto;">
 
-| request_id|start_time                | thread| num_threads|response_code |response_message |request_status | sent_bytes| received_bytes| time_since_start| elapsed| latency| connect| idle|
+| request_id|start time                | thread| num threads|response code |response message |request status | sent bytes| received bytes| time since start| elapsed| latency| connect| idle|
 |----------:|:-------------------|------:|-----------:|:-------------|:----------------|:--------------|----------:|--------------:|----------------:|-------:|-------:|-------:|----:|
-|          1|2019-07-18 12:22:23 |      1|           5|200           |OK               |Success        |        115|          12263|                0|     696|     668|     604|    0|
-|          2|2019-07-18 12:22:23 |      5|           5|200           |OK               |Success        |        115|          13190|                0|     701|     668|     604|    0|
-|          3|2019-07-18 12:22:23 |      2|           5|200           |OK               |Success        |        115|          12219|                0|     701|     668|     604|    0|
-|          4|2019-07-18 12:22:23 |      4|           5|200           |OK               |Success        |        115|          12268|                0|     705|     668|     604|    0|
-|          5|2019-07-18 12:22:23 |      3|           5|200           |OK               |Success        |        115|          12246|                0|     707|     673|     604|    0|
-|          6|2019-07-18 12:22:23 |      1|           5|200           |OK               |Success        |        115|          12298|              700|     152|     128|      78|    0|
+|          1|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12263|                0|     696|     668|     604|    0|
+|          2|12:22:23 |      5|           5|200           |OK               |Success        |        115|          13190|                0|     701|     668|     604|    0|
+|          3|12:22:23 |      2|           5|200           |OK               |Success        |        115|          12219|                0|     701|     668|     604|    0|
+|          4|12:22:23 |      4|           5|200           |OK               |Success        |        115|          12268|                0|     705|     668|     604|    0|
+|          5|12:22:23 |      3|           5|200           |OK               |Success        |        115|          12246|                0|     707|     673|     604|    0|
+|          6|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12298|              700|     152|     128|      78|    0|
 
 </div>
 
@@ -73,7 +73,7 @@ Since loadtest is powered by Apache JMeter, which requires Java, the installatio
 
 1. Install Java*
 2. Install JMeter
-3. Install loadtest
+3. Install loadtest R package
 
 _*While Java is required for loadtest, the package rJava is not needed._
 

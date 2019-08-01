@@ -4,8 +4,8 @@
 \alias{loadtest}
 \title{Run a load test of an HTTP request}
 \usage{
-loadtest(url, method, headers = NULL, body = NULL, num_threads = 1,
-  num_loops = 16, ramp_time = 0, delay_between_requests = 0)
+loadtest(url, method, headers = NULL, body = NULL, threads = 1,
+  loops = 16, ramp_time = 0, delay_per_request = 0)
 }
 \arguments{
 \item{url}{The url to hit as part of the test}
@@ -14,13 +14,13 @@ loadtest(url, method, headers = NULL, body = NULL, num_threads = 1,
 
 \item{body}{a list to be encoded as a json object to use as the body of the HTTP request}
 
-\item{num_threads}{The number of threads to concurrently run in the test}
+\item{threads}{The number of threads to concurrently run in the test}
 
-\item{num_loops}{The number of times each thread should hit the endpoint}
+\item{loops}{The number of times each thread should hit the endpoint}
 
 \item{ramp_time}{the time (in seconds) that it should take before all threads are firing}
 
-\item{delay_between_requests}{a delay (in milliseconds) after a thread completes before it should make its next request}
+\item{delay_per_request}{a delay (in milliseconds) after a thread completes before it should make its next request}
 }
 \value{
 A data.frame containing the JMeter test results of the HTTP requests made during the tests. The columns
@@ -29,7 +29,7 @@ have the following specification.
   \item{request_id}{An intentifier for each request. An integer from 1 to the number of requests/}
   \item{start_time}{The time the request was started, as a POSIXct.}
   \item{thread}{The thread the request was made from (from 1 to n, where n is the number of threads)}
-  \item{num_threads}{The number of open threads at the time the request was made. Should decrease to 1 as the requests finish.}
+  \item{threads}{The number of open threads at the time the request was made. Should decrease to 1 as the requests finish.}
   \item{response_code}{The response code of the HTTP request, such as 200, 403, or 500.
   A character that should be able to be converted to an integer, but may be a string be if an error occurred.}
   \item{response_message}{The message of the response. May be an error if the request fails.}
@@ -55,6 +55,6 @@ then the function calls JMeter to run a load test. For requests that require spe
 a body, you can specify them as well.
 }
 \examples{
-results <- loadtest(url = "https://www.google.com", method="GET", num_threads = 3, num_loops = 5)
-results <- loadtest(url = "http://pets.nolisllc.com/names", method="GET", num_threads = 1, num_loops = 15)
+results <- loadtest(url = "https://www.google.com", method="GET", threads = 3, loops = 5)
+results <- loadtest(url = "http://pets.nolisllc.com/names", method="GET", threads = 1, loops = 15)
 }
