@@ -65,20 +65,11 @@ java_path <- function(){
 
 check_java_installed <- function(){
   tryCatch({
-    if(!nzchar(Sys.which("java"))){
+    if(!nzchar(Sys.which(java_path()))){
       warning("Unable to find Java installation. https://github.com/tmobile/loadtest#installation")
       FALSE
     } else {
-      version <- system2(java_path(),"-version", stdout=TRUE, stderr=TRUE)
-      version <- regmatches(version[1],regexec("^java version \"([0-9\\.]+)\"", version[1]))[[1]][2]
-      main_version <- as.numeric(regmatches(version[1],regexec("^([0-9]+).", version[1]))[[1]][2])
-      if(main_version < 8){
-        warning("Java installation found but not version 8+. https://github.com/tmobile/loadtest#installation")
-        FALSE
-      } else {
-        TRUE
-      }
-
+      TRUE
     }
   }, error = function(e){
     warning("Unable to find Java installation. https://github.com/tmobile/loadtest#installation")

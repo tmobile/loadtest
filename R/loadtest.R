@@ -63,17 +63,22 @@ parse_url <- function(url){
 #' then the function calls JMeter to run a load test. For requests that require special headers or
 #' a body, you can specify them as well.
 #'
-#' @param url The url to hit as part of the test
-#' @param threads The number of threads to concurrently run in the test
-#' @param loops The number of times each thread should hit the endpoint
-#' @param ramp_time the time (in seconds) that it should take before all threads are firing
-#' @param delay_per_request a delay (in milliseconds) after a thread completes before it should make its next request
-#' @param body a list to be encoded as a json object to use as the body of the HTTP request
-#' @param headers a named character vector of headers to use as part of HTTP request. The names are the keys and the vector contents are the values.
+#' @param url The url to hit as part of the test.
+#' @param method The HTTP method to use. Defaults to "GET" but other common choices are "POST", "PUT", and "DELETE".
+#' @param body A list to be encoded as a json object to use as the body of the HTTP request.
+#' @param headers A named character vector of headers to use as part of HTTP request. The names are the keys and the vector contents are the values.
+#' @param encode The method of encoding the body, if it exists.
+#' @param threads The number of threads to concurrently run in the test.
+#' @param loops The number of times each thread should hit the endpoint.
+#' @param ramp_time The time (in seconds) that it should take before all threads are firing.
+#' @param delay_per_request A delay (in milliseconds) after a thread completes before it should make its next request.
+
+#' Raw assumes the body is a character and preserves it.
+#' Json converts a list into json like the pacakge httr.
 #' @return A data.frame containing the JMeter test results of the HTTP requests made during the tests. The columns
 #' have the following specification.
 #' \describe{
-#'   \item{request_id}{An intentifier for each request. An integer from 1 to the number of requests/}
+#'   \item{request_id}{An intentifier for each request. An integer from 1 to the number of requests}
 #'   \item{start_time}{The time the request was started, as a POSIXct.}
 #'   \item{thread}{The thread the request was made from (from 1 to n, where n is the number of threads)}
 #'   \item{threads}{The number of open threads at the time the request was made. Should decrease to 1 as the requests finish.}
@@ -92,26 +97,39 @@ parse_url <- function(url){
 #'   This is included in the elapsed time (and is at most equal to).}
 #'   \item{connect}{The number of milliseconds needed to make the connection. This is included in both the elapsed and latency measures,
 #'   but it may need to be removed depending on what should be measured.}
-#'   \item{idle}{The number of milliseconds that the thread was idling.}
 #' }
 #'
 #' @examples
-#' results <- loadtest(url = "https://www.google.com", method="GET", threads = 3, loops = 5)
-#' results <- loadtest(url = "http://pets.nolisllc.com/names", method="GET", threads = 1, loops = 15)
+#' # a simple GET request
+#' results <- loadtest(url = "https://www.microsoft.com", threads = 2, loops = 5)
+#'
+#' # a more complex POST request
+#' results <- loadtest(url = "http://deepmoji.teststuff.biz",
+#'                     method = "POST",
+#'                     headers = c("version"="v1.0"),
+#'                     body = list(sentences = list("I love this band")),
+#'                     encode = "json",
+#'                     threads = 1,
+#'                     loops = 15,
+#'                     delay_per_request = 100)
 #' @export
 loadtest <- function(url,
-                       method,
-                       headers = NULL,
-                       body = NULL,
-                       threads = 1,
-                       loops = 16,
-                       ramp_time = 0,
-                       delay_per_request = 0){
+                     method = c("GET", "POST", "HEAD", "TRACE", "OPTIONS", "PUT", "DELETE"),
+                     headers = NULL,
+                     body = NULL,
+                     encode = c("raw","json"),
+                     threads = 1,
+                     loops = 16,
+                     ramp_time = 0,
+                     delay_per_request = 0){
 
   invisible(check_java_installed())
   invisible(check_jmeter_installed())
 
   # set up the test specification file ---------------------
+  method <- match.arg(method)
+  encode <- match.arg(encode)
+
   parsed_url <- parse_url(url)
   protocol <- parsed_url$protocol
   domain <- parsed_url$domain
@@ -130,7 +148,15 @@ loadtest <- function(url,
   original_headers <- headers
   original_body <- body
 
-  if(!is.null(headers)){
+  if(is.null(headers)){
+    headers <- c()
+  }
+
+  if(encode=="json"){
+    headers = c(headers,c("Content-Type"="application/json"))
+  }
+
+  if(length(headers) > 0){
     headers_in_template <- lapply(seq_along(headers), function(i) glue::glue(header_template,name=names(headers)[[i]],value=headers[[i]]))
     headers <- paste0(headers_in_template,collapse="\n")
   } else {
@@ -138,7 +164,14 @@ loadtest <- function(url,
   }
 
   if(!is.null(body)){
-    request_body <- gsub("\"", "&quot;", jsonlite::toJSON(body,auto_unbox=TRUE))
+
+    if(encode=="json"){
+      request_body <- gsub("\"", "&quot;", jsonlite::toJSON(body,auto_unbox=TRUE))
+    } else if(encode=="raw"){
+      request_body <- gsub("\"", "&quot;", body)
+    } else {
+      stop("'encode' value not yet supported")
+    }
     body <- glue::glue(body_template,request_body = request_body)
   } else {
     body <- ""
@@ -189,7 +222,7 @@ loadtest <- function(url,
   output[["request_id"]] <- 1:nrow(output)
   output[["request_status"]] <- factor(ifelse(output[["request_status"]],"Success","Failure"),c("Failure","Success"))
   output <- output[,c("request_id", "start_time", "thread", "threads", "response_code", "response_message",
-                      "request_status", "sent_bytes", "received_bytes", "time_since_start", "elapsed", "latency", "connect", "idle")]
+                      "request_status", "sent_bytes", "received_bytes", "time_since_start", "elapsed", "latency", "connect")]
 
   attr(output, "config") <- list(url=url,
                                  method=method,

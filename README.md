@@ -13,7 +13,7 @@ This package has a single primary function `loadtest` used to run a load test ag
 ```r
 library(loadtest)
 
-results <- loadtest(url = "https://www.google.com", method = "GET", threads = 5, loops = 10)
+results <- loadtest(url = "https://www.microsoft.com", method = "GET", threads = 2, loops = 10)
 
 head(results)
 ```
@@ -22,12 +22,12 @@ head(results)
 
 | request_id|start time                | thread| num threads|response code |response message |request status | sent bytes| received bytes| time since start| elapsed| latency| connect| idle|
 |----------:|:-------------------|------:|-----------:|:-------------|:----------------|:--------------|----------:|--------------:|----------------:|-------:|-------:|-------:|----:|
-|          1|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12263|                0|     696|     668|     604|    0|
-|          2|12:22:23 |      5|           5|200           |OK               |Success        |        115|          13190|                0|     701|     668|     604|    0|
-|          3|12:22:23 |      2|           5|200           |OK               |Success        |        115|          12219|                0|     701|     668|     604|    0|
-|          4|12:22:23 |      4|           5|200           |OK               |Success        |        115|          12268|                0|     705|     668|     604|    0|
-|          5|12:22:23 |      3|           5|200           |OK               |Success        |        115|          12246|                0|     707|     673|     604|    0|
-|          6|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12298|              700|     152|     128|      78|    0|
+|          1|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12263|                0|     696|     668|     604|
+|          2|12:22:23 |      5|           5|200           |OK               |Success        |        115|          13190|                0|     701|     668|     604|
+|          3|12:22:23 |      2|           5|200           |OK               |Success        |        115|          12219|                0|     701|     668|     604|
+|          4|12:22:23 |      4|           5|200           |OK               |Success        |        115|          12268|                0|     705|     668|     604|
+|          5|12:22:23 |      3|           5|200           |OK               |Success        |        115|          12246|                0|     707|     673|     604|
+|          6|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12298|              700|     152|     128|      78|
 
 </div>
 
@@ -38,6 +38,19 @@ This table has 50 rows, one for each of the ten requests that the five threads m
 * __elapsed__ - how many milliseconds passed between the start of the request and the end of the response
 
 If you're creating your own API, by using the loadtest package you can test how quickly the responses will be returned as you increase the concurrent requests. This can help you avoid situations where the API is released and is unable to handle the production load.
+
+You can also do more complex requests that have a body or headers:
+
+```r
+results <- loadtest(url = "http://deepmoji.teststuff.biz",
+                    method = "POST",
+                    headers = c("version"="v1.0"),
+                    body = list(sentences = list("I love this band")),
+                    encode="json",
+                    threads = 1,
+                    loops = 15,
+                    delay_per_request=100)
+```
 
 In addition to creating a table of test results, the package has plotting capabilities to help you quickly understand the values of the test. using the `loadtest::plot_` commands you can plot the data in multiple ways. Here we show a new request with 8 threads and 32 requests each.
 
@@ -79,18 +92,23 @@ _*While Java is required for loadtest, the package rJava is not needed._
 
 ### Installing Java
 
-To install Java, go to the [Oracle website](https://java.com/en/download/help/download_options.xml) and follow their instructions. 
+To install Java, go to the [Oracle website](https://java.com/en/download/help/download_options.xml) and follow their instructions.
 
 You can test you have Java correctly installed by opening a terminal and running `java -version`.
 
 ### Installing JMeter
-Then, you need to download [Apache JMeter](https://jmeter.apache.org/download_jmeter.cgi), and extract the zip file to a folder. That folder needs to be added to the system path, just like for Java.
+Then, you need to download [Apache JMeter](https://jmeter.apache.org/download_jmeter.cgi), and extract the zip file to a folder.
 
-You can test you have Apache JMeter correctly installed by opening a terminal and running `jmeter --version`. If you get an error that JMeter doesn't exist, the path was likely not set correctly. You can manually specify the path to get to JMeter from within R by using:
+The `bin` subfolder you extract needs to be added to the system path. You can test you have Apache JMeter correctly installed by opening a terminal and running `jmeter --version`. If you get an error that JMeter doesn't exist, the path was likely not set correctly. 
+
+Alternatively. You can manually specify the path to get to the JMeter bin folder from within R by using:
 
 ```r
 Sys.setenv("LOADTEST_JMETER_PATH"="[path to jmeter bin folder]")
 ```
+
+You'll need to do this each time you start R.
+
 
 ### Installing loadtest
 

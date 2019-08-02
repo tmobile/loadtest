@@ -4,29 +4,37 @@
 \alias{loadtest}
 \title{Run a load test of an HTTP request}
 \usage{
-loadtest(url, method, headers = NULL, body = NULL, threads = 1,
-  loops = 16, ramp_time = 0, delay_per_request = 0)
+loadtest(url, method = c("GET", "POST", "HEAD", "TRACE", "OPTIONS",
+  "PUT", "DELETE"), headers = NULL, body = NULL, encode = c("raw",
+  "json"), threads = 1, loops = 16, ramp_time = 0,
+  delay_per_request = 0)
 }
 \arguments{
-\item{url}{The url to hit as part of the test}
+\item{url}{The url to hit as part of the test.}
 
-\item{headers}{a named character vector of headers to use as part of HTTP request. The names are the keys and the vector contents are the values.}
+\item{method}{The HTTP method to use. Defaults to "GET" but other common choices are "POST", "PUT", and "DELETE".}
 
-\item{body}{a list to be encoded as a json object to use as the body of the HTTP request}
+\item{headers}{A named character vector of headers to use as part of HTTP request. The names are the keys and the vector contents are the values.}
 
-\item{threads}{The number of threads to concurrently run in the test}
+\item{body}{A list to be encoded as a json object to use as the body of the HTTP request.}
 
-\item{loops}{The number of times each thread should hit the endpoint}
+\item{encode}{The method of encoding the body, if it exists.}
 
-\item{ramp_time}{the time (in seconds) that it should take before all threads are firing}
+\item{threads}{The number of threads to concurrently run in the test.}
 
-\item{delay_per_request}{a delay (in milliseconds) after a thread completes before it should make its next request}
+\item{loops}{The number of times each thread should hit the endpoint.}
+
+\item{ramp_time}{The time (in seconds) that it should take before all threads are firing.}
+
+\item{delay_per_request}{A delay (in milliseconds) after a thread completes before it should make its next request.
+Raw assumes the body is a character and preserves it.
+Json converts a list into json like the pacakge httr.}
 }
 \value{
 A data.frame containing the JMeter test results of the HTTP requests made during the tests. The columns
 have the following specification.
 \describe{
-  \item{request_id}{An intentifier for each request. An integer from 1 to the number of requests/}
+  \item{request_id}{An intentifier for each request. An integer from 1 to the number of requests}
   \item{start_time}{The time the request was started, as a POSIXct.}
   \item{thread}{The thread the request was made from (from 1 to n, where n is the number of threads)}
   \item{threads}{The number of open threads at the time the request was made. Should decrease to 1 as the requests finish.}
@@ -45,7 +53,6 @@ have the following specification.
   This is included in the elapsed time (and is at most equal to).}
   \item{connect}{The number of milliseconds needed to make the connection. This is included in both the elapsed and latency measures,
   but it may need to be removed depending on what should be measured.}
-  \item{idle}{The number of milliseconds that the thread was idling.}
 }
 }
 \description{
@@ -55,6 +62,16 @@ then the function calls JMeter to run a load test. For requests that require spe
 a body, you can specify them as well.
 }
 \examples{
-results <- loadtest(url = "https://www.google.com", method="GET", threads = 3, loops = 5)
-results <- loadtest(url = "http://pets.nolisllc.com/names", method="GET", threads = 1, loops = 15)
+# a simple GET request
+results <- loadtest(url = "https://www.microsoft.com", threads = 2, loops = 5)
+
+# a more complex POST request
+results <- loadtest(url = "http://deepmoji.teststuff.biz",
+                    method = "POST",
+                    headers = c("version"="v1.0"),
+                    body = list(sentences = list("I love this band")),
+                    encode = "json",
+                    threads = 1,
+                    loops = 15,
+                    delay_per_request = 100)
 }

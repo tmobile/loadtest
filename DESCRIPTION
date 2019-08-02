@@ -1,7 +1,7 @@
 Package: loadtest
 Type: Package
 Title: HTTP load testing directly from R
-Version: 0.1.1.9000
+Version: 0.1.2
 Author@R: person("Jacqueline", "Nolis", email = "jacqueline.nolis2@t-mobile.com", role = c("aut", "cre"))
 Description: This package allows you to run a load test of an HTTP request, such as for an R plumber REST API, from within R
 License: file LICENSE
