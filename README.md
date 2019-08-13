@@ -115,5 +115,6 @@ You'll need to do this each time you start R.
 You can install the loadtest package by running:
 
 ```r
+# install.packages("remotes")   # run this if you don't have remotes or devtools installed
 remotes::install_github("tmobile/loadtest")
 ```
