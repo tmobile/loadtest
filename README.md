@@ -118,3 +118,7 @@ You can install the loadtest package by running:
 # install.packages("remotes")   # run this if you don't have remotes or devtools installed
 remotes::install_github("tmobile/loadtest")
 ```
+
+### Legal 
+
+_This tool is released as-is, and while we believe it should give you accurate and consistent load testing results, we can't guarantee any level of accuracy. Any issues caused by inaccurate or inconsistent output are not the responsibility of T-Mobile._
