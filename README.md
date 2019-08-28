@@ -13,7 +13,7 @@ This package has a single primary function `loadtest` used to run a load test ag
 ```r
 library(loadtest)
 
-results <- loadtest(url = "https://www.microsoft.com", method = "GET", threads = 2, loops = 10)
+results <- loadtest(url = "https://www.t-mobile.com/", method = "GET", threads = 2, loops = 10)
 
 head(results)
 ```
