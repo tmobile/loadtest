@@ -20,7 +20,7 @@ head(results)
 
 <div style="width: 100%; overflow: auto;">
 
-| request_id|start time                | thread| num threads|response code |response message |request status | sent bytes| received bytes| time since start| elapsed| latency| connect| idle|
+| request_id|start time                | thread| num threads|response code |response message |request status | sent bytes| received bytes| time since start| elapsed| latency| connect|
 |----------:|:-------------------|------:|-----------:|:-------------|:----------------|:--------------|----------:|--------------:|----------------:|-------:|-------:|-------:|----:|
 |          1|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12263|                0|     696|     668|     604|
 |          2|12:22:23 |      5|           5|200           |OK               |Success        |        115|          13190|                0|     701|     668|     604|
@@ -63,7 +63,6 @@ plot_requests_per_second(results)
 
 ![Example plots](man/figures/README-example-plots.png)
 
-
 Starting from the upper-left:
 
 1. The elapsed time of each request of the course of the test. Here we can see that the completion time was rather consistent, but had some variance for the first request of the threads.
@@ -78,7 +77,6 @@ loadtest_report(results,"C:/[location_to_save_to].html")
 ```
 
 <img src="man/figures/README-example-report.png" height="400px" style="margin-top:20px">
-
 
 ## Installation
 
@@ -97,6 +95,7 @@ To install Java, go to the [Oracle website](https://java.com/en/download/help/do
 You can test you have Java correctly installed by opening a terminal and running `java -version`.
 
 ### Installing JMeter
+
 Then, you need to download [Apache JMeter](https://jmeter.apache.org/download_jmeter.cgi), and extract the zip file to a folder.
 
 The `bin` subfolder you extract needs to be added to the system path. You can test you have Apache JMeter correctly installed by opening a terminal and running `jmeter --version`. If you get an error that JMeter doesn't exist, the path was likely not set correctly. 
@@ -108,7 +107,6 @@ Sys.setenv("LOADTEST_JMETER_PATH"="[path to jmeter bin folder]")
 ```
 
 You'll need to do this each time you start R.
-
 
 ### Installing loadtest
 
