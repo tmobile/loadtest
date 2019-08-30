@@ -47,12 +47,12 @@ results <- loadtest(url = "http://deepmoji.teststuff.biz",
                     headers = c("version"="v1.0"),
                     body = list(sentences = list("I love this band")),
                     encode="json",
-                    threads = 1,
-                    loops = 15,
+                    threads = 8,
+                    loops = 32,
                     delay_per_request=100)
 ```
 
-In addition to creating a table of test results, the package has plotting capabilities to help you quickly understand the values of the test. using the `loadtest::plot_` commands you can plot the data in multiple ways. Here we show a new request with 8 threads and 32 requests each.
+In addition to creating a table of test results, the package has plotting capabilities to help you quickly understand the values of the test. using the `loadtest::plot_` commands you can plot the data in multiple ways.
 
 ```r
 plot_elapsed_times(results)
