@@ -24,7 +24,7 @@
 #' This code takes a url and breaks it into several components
 #' \describe{
 #' \item{protocol}{Either http or https}
-#' \item{domain}{The base domain, such as www.google.com}
+#' \item{domain}{The base domain, such as https://www.t-mobile.com}
 #' \item{path}{The path after the base domain such as /mail/account=1}
 #' \item{port}{The port to use, either 80 for HTTP, 443 for HTTPS, or anything if explicitly set like :8000 after a domain}
 #' }
@@ -67,7 +67,7 @@ parse_url <- function(url){
 #' then the function calls JMeter to run a load test. For requests that require special headers or
 #' a body, you can specify them as well.
 #'
-#' @param url The url to hit as part of the test.
+#' @param url The url to hit as part of the test, such as https://www.t-mobile.com .
 #' @param method The HTTP method to use. Defaults to "GET" but other common choices are "POST", "PUT", and "DELETE".
 #' @param body A list to be encoded as a json object to use as the body of the HTTP request.
 #' @param headers A named character vector of headers to use as part of HTTP request. The names are the keys and the vector contents are the values.
@@ -105,7 +105,7 @@ parse_url <- function(url){
 #'
 #' @examples
 #' # a simple GET request
-#' results <- loadtest(url = "https://www.microsoft.com", threads = 2, loops = 5)
+#' results <- loadtest(url = "https://www.t-mobile.com", threads = 2, loops = 5)
 #'
 #' # a more complex POST request
 #' results <- loadtest(url = "http://deepmoji.teststuff.biz",

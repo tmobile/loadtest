@@ -10,7 +10,7 @@ loadtest(url, method = c("GET", "POST", "HEAD", "TRACE", "OPTIONS",
   delay_per_request = 0)
 }
 \arguments{
-\item{url}{The url to hit as part of the test.}
+\item{url}{The url to hit as part of the test, such as https://www.t-mobile.com .}
 
 \item{method}{The HTTP method to use. Defaults to "GET" but other common choices are "POST", "PUT", and "DELETE".}
 
@@ -63,7 +63,7 @@ a body, you can specify them as well.
 }
 \examples{
 # a simple GET request
-results <- loadtest(url = "https://www.microsoft.com", threads = 2, loops = 5)
+results <- loadtest(url = "https://www.t-mobile.com", threads = 2, loops = 5)
 
 # a more complex POST request
 results <- loadtest(url = "http://deepmoji.teststuff.biz",

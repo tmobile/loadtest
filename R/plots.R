@@ -33,11 +33,12 @@ plot_elapsed_times <- function(results){
   }
   ggplot2::ggplot(results, ggplot2::aes(x=time_since_start,y=elapsed,color=request_status))+
     ggplot2::geom_point()+
-    ggplot2::scale_color_discrete(drop=FALSE)+
     ggplot2::labs(x="Time since start (milliseconds)",
                   y = "Time to complete request (milliseconds)",
                   color="Request status",
                   title="Time to complete request over duration of test")+
+    ggplot2::theme_minimal()+
+    ggplot2::scale_color_manual(values=c("#606060", "#E20074"), drop=FALSE)+
     ggplot2::theme(legend.position = "bottom")+
     ggplot2::scale_y_continuous(limits=c(0,NA))+
     ggplot2::geom_hline(yintercept = mean(results$elapsed))
@@ -59,8 +60,9 @@ plot_elapsed_times_histogram <- function(results,binwidth=250){
   ggplot2::ggplot(results, ggplot2::aes(x=elapsed,fill=request_status))+
     ggplot2::geom_histogram(binwidth=binwidth,color="#606060")+
     ggplot2::scale_x_continuous(breaks=seq(0,max(results[["elapsed"]])*2,binwidth))+
-    ggplot2::scale_fill_discrete(drop=FALSE)+
-    ggplot2::labs(x="Time to complete response (milliseconds)",color="Request status",
+    ggplot2::theme_minimal()+
+    ggplot2::scale_fill_manual(values=c("#606060", "#E20074"), drop=FALSE)+
+    ggplot2::labs(x="Time to complete response (milliseconds)",fill="Request status",
                   title="Distribution of time to complete responses")+
     ggplot2::theme(legend.position = "bottom")
 }
@@ -90,7 +92,8 @@ plot_requests_per_second <- function(results){
   counts[["label"]] <- ifelse(counts[["nn"]] == 0, "", counts[["label"]])
 
   ggplot2::ggplot(counts, ggplot2::aes(x=n,y=p,label=label))+
-    ggplot2::geom_col()+
+    ggplot2::geom_col(fill="#E20074", color="#606060")+
+    ggplot2::theme_minimal()+
     ggplot2::geom_text(vjust=-0.5)+
     ggplot2::scale_x_continuous(breaks=seq(0,1000,1))+
     ggplot2::scale_y_continuous(limits=c(0,1),labels=function(x) paste0(round(x,2)*100,"%"))+
@@ -113,7 +116,8 @@ plot_requests_by_thread <- function(results){
   results[["thread"]] <- factor(results[["thread"]],levels=1:max(results[["thread"]]))
   ggplot2::ggplot(results,ggplot2::aes(x=time_since_start,y=thread,color=request_status))+
     ggplot2::geom_point()+
-    ggplot2::scale_color_discrete(drop=FALSE)+
+    ggplot2::theme_minimal()+
+    ggplot2::scale_color_manual(values=c("#606060", "#E20074"), drop=FALSE)+
     ggplot2::labs(x="Time since start (milliseconds)",
                   y="Thread",
                   color="Request status",

@@ -13,7 +13,7 @@ parse_url(url)
 This code takes a url and breaks it into several components
 \describe{
 \item{protocol}{Either http or https}
-\item{domain}{The base domain, such as www.google.com}
+\item{domain}{The base domain, such as https://www.t-mobile.com}
 \item{path}{The path after the base domain such as /mail/account=1}
 \item{port}{The port to use, either 80 for HTTP, 443 for HTTPS, or anything if explicitly set like :8000 after a domain}
 }

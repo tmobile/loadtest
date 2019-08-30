@@ -26,7 +26,7 @@
 #' @param result the output of using loadtest()
 #' @param output_file the location to save the report
 #' @examples
-#' results <- loadtest(url = "https://www.google.com", method="GET", threads = 3, loops = 5)
+#' results <- loadtest(url = "https://www.t-mobile.com", method="GET", threads = 3, loops = 5)
 #' loadtest_report(results,"~/report.html")
 #' @export
 loadtest_report <- function(results, output_file){

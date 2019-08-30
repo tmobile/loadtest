@@ -20,14 +20,14 @@ head(results)
 
 <div style="width: 100%; overflow: auto;">
 
-| request_id|start time                | thread| num threads|response code |response message |request status | sent bytes| received bytes| time since start| elapsed| latency| connect|
-|----------:|:-------------------|------:|-----------:|:-------------|:----------------|:--------------|----------:|--------------:|----------------:|-------:|-------:|-------:|----:|
-|          1|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12263|                0|     696|     668|     604|
-|          2|12:22:23 |      5|           5|200           |OK               |Success        |        115|          13190|                0|     701|     668|     604|
-|          3|12:22:23 |      2|           5|200           |OK               |Success        |        115|          12219|                0|     701|     668|     604|
-|          4|12:22:23 |      4|           5|200           |OK               |Success        |        115|          12268|                0|     705|     668|     604|
-|          5|12:22:23 |      3|           5|200           |OK               |Success        |        115|          12246|                0|     707|     673|     604|
-|          6|12:22:23 |      1|           5|200           |OK               |Success        |        115|          12298|              700|     152|     128|      78|
+| request_id|start time | thread| num threads|response code |response message |request status | sent bytes| received bytes| time since start| elapsed| latency| connect|
+|----------:|:----------|------:|-----------:|:-------------|:----------------|:--------------|----------:|--------------:|----------------:|-------:|-------:|-------:|
+|          1|12:22:23   |      1|           5|200           |OK               |Success        |        115|          12263|                0|     696|     668|     604|
+|          2|12:22:23   |      5|           5|200           |OK               |Success        |        115|          13190|                0|     701|     668|     604|
+|          3|12:22:23   |      2|           5|200           |OK               |Success        |        115|          12219|                0|     701|     668|     604|
+|          4|12:22:23   |      4|           5|200           |OK               |Success        |        115|          12268|                0|     705|     668|     604|
+|          5|12:22:23   |      3|           5|200           |OK               |Success        |        115|          12246|                0|     707|     673|     604|
+|          6|12:22:23   |      1|           5|200           |OK               |Success        |        115|          12298|              700|     152|     128|      78|
 
 </div>
 
@@ -73,7 +73,7 @@ Starting from the upper-left:
 Finally, you can easily create an Rmarkdown report which includes these plots as well as other summary statistics. This can be useful for automating automatically running load tests as part of a build process. The function takes the results of a load test and a path to save to and generates the report.
 
 ```{r}
-loadtest_report(results,"C:/[location_to_save_to].html")
+loadtest_report(results,"[location_to_save_to].html")
 ```
 
 <img src="man/figures/README-example-report.png" height="400px" style="margin-top:20px">
