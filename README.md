@@ -8,7 +8,7 @@ This package is to make load testing of APIs, such as those created with the R p
 
 Load testing, the process of ensuring that a website or API works by simulating a massive load a traffic and seeing how the website or API performs, is a critical step in the development of production systems. R is becoming more popular for production system environments through tools such as [plumber](https://www.rplumber.io/), [Rocker](https://hub.docker.com/u/rocker/), and the [T-Mobile R TensorFlow API platform](https://github.com/tmobile/r-tensorflow-api), so having a way to do load testing while staying within the R environment is useful.
 
-This package has a single primary function `loadtest` used to run a load test against a URL. For example, suppose we wanted to test having 5 threads hit t-mobile.com, and each thread hits Google 10 times sequentially. To run that test we would do a single `loadtest` call, which creates a data frame of results:
+This package has a single primary function `loadtest` which is used to run a load test against a URL. For example, suppose we wanted to test having 5 threads hit t-mobile.com, and each thread hits Google 10 times sequentially. To run that test, we do a single `loadtest` call, which creates a data frame of results:
 
 ```r
 library(loadtest)
@@ -52,7 +52,7 @@ results <- loadtest(url = "http://deepmoji.teststuff.biz",
                     delay_per_request=100)
 ```
 
-In addition to creating a table of test results, the package has plotting capabilities to help you quickly understand the values of the test. using the `loadtest::plot_` commands you can plot the data in multiple ways.
+In addition to creating a table of test results, the package has plotting capabilities to help you quickly understand the values of the test. Using the `loadtest::plot_` commands you can plot the data in multiple ways.
 
 ```r
 plot_elapsed_times(results)
