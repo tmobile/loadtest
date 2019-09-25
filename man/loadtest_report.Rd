@@ -4,10 +4,10 @@
 \alias{loadtest_report}
 \title{Create an output report of a jmeter run}
 \usage{
-loadtest_report(results, output_file)
+loadtest_report(results, output_file = NULL)
 }
 \arguments{
-\item{output_file}{the location to save the report}
+\item{output_file}{the location to save the report. Defaults to creating loadtest_report.html in the working directory.}
 
 \item{result}{the output of using loadtest()}
 }

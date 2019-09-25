@@ -24,16 +24,20 @@
 #' This function uses R markdown to take the results of a jmeter run and turn it
 #'
 #' @param result the output of using loadtest()
-#' @param output_file the location to save the report
+#' @param output_file the location to save the report. Defaults to creating loadtest_report.html in the working directory.
 #' @examples
 #' results <- loadtest(url = "https://www.t-mobile.com", method="GET", threads = 3, loops = 5)
 #' loadtest_report(results,"~/report.html")
 #' @export
-loadtest_report <- function(results, output_file){
+loadtest_report <- function(results, output_file=NULL){
   if (!requireNamespace("rmarkdown", quietly = TRUE)) {
     stop("Package rmarkdown is needed for this function.",call. = FALSE)
   }
-
+  if(is.null(output_file)){
+    output_file <- file.path(getwd(),"loadtest_report.html")
+    message(paste0("No output file path specified. Saving to: ",output_file))
+  }
+  print(output_file)
   rmarkdown::render(system.file("report_template.Rmd", package = "loadtest"),
                     output_file = output_file,
                     params = list(results=results))
