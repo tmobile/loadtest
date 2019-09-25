@@ -28,6 +28,11 @@
 #' @name loadtest-package
 NULL
 
+.onAttach <- function(libname, pkgname){
+  logo <- system.file("logo.txt", package = "loadtest")
+  packageStartupMessage(readChar(logo, file.info(logo)$size))
+}
+
 
 #' Command for the jmeter executable
 #'

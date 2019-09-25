@@ -194,8 +194,9 @@ loadtest <- function(url,
   write(jmx_spec, spec_location)
 
   # run the test -----------------------------
-
+  message("loadtest - beginning load test")
   system2(jmeter_path(),args=c("-n","-t",spec_location,"-l",save_location), stdout="")
+  message("loadtest - completed load test")
 
   # read back in the results as a data frame -------------------------------
   output <- read.csv(save_location,
