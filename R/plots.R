@@ -36,12 +36,13 @@ plot_elapsed_times <- function(results){
     ggplot2::labs(x="Time since start (milliseconds)",
                   y = "Time to complete request (milliseconds)",
                   color="Request status",
-                  title="Time to complete request over duration of test")+
+                  title="Time to complete request over duration of test",
+                  caption="Horizontal line is the median response")+
     ggplot2::theme_minimal()+
     ggplot2::scale_color_manual(values=c("#606060", "#E20074"), drop=FALSE)+
     ggplot2::theme(legend.position = "bottom")+
     ggplot2::scale_y_continuous(limits=c(0,NA))+
-    ggplot2::geom_hline(yintercept = mean(results$elapsed))
+    ggplot2::geom_hline(yintercept = median(results$elapsed))
 }
 
 #' Plot the elapsed times of the requests as a histogram

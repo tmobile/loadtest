@@ -70,8 +70,8 @@ if(sum(params$results$request_status == "Failure") > 0){
 ## Results
 
 * Runtime: `r round((max(params$results$time_since_start) + results$elapsed[which.max(results$start_time)])/1000,3)` seconds
-* Response speed: `r nrow(params$results)/(max(params$results$time_since_start) + results$elapsed[which.max(results$start_time)])*1000` requests per second
-* Mean response time: `r mean(params$results$elapsed)` seconds
+* Response speed: `r round(nrow(params$results)/(max(params$results$time_since_start) + results$elapsed[which.max(results$start_time)])*1000,3)` requests per second
+* Median response time: `r round(median(params$results$elapsed),3)` milliseconds
 
 ```{r plot_results, echo=FALSE}
 loadtest::plot_elapsed_times(params$results)
