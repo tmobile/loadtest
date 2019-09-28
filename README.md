@@ -6,7 +6,7 @@
 
 This package is to make load testing of APIs, such as those created with the R package plumber, easy to do. It uses Apache JMeter on the backend--a modern platform for load testing. The loadtest package is open source and maintained by the AI @ T-Mobile team.
 
-Load testing, the process of ensuring that a website or API works by simulating a massive load a traffic and seeing how the website or API performs, is a critical step in the development of production systems. R is becoming more popular for production system environments through tools such as [plumber](https://www.rplumber.io/), [Rocker](https://hub.docker.com/u/rocker/), and the [T-Mobile R TensorFlow API platform](https://github.com/tmobile/r-tensorflow-api), so having a way to do load testing while staying within the R environment is useful.
+Load testing, the process of ensuring that a website or API works by simulating a massive load of traffic and seeing how the website or API performs, is a critical step in the development of production systems. R is becoming more popular for production system environments through tools such as [plumber](https://www.rplumber.io/), [Rocker](https://hub.docker.com/u/rocker/), and the [T-Mobile R TensorFlow API platform](https://github.com/tmobile/r-tensorflow-api), so having a way to do load testing while staying within the R environment is useful.
 
 This package has a single primary function `loadtest` which is used to run a load test against a URL. For example, suppose we wanted to test having 5 threads hit t-mobile.com, and each thread hits Google 10 times sequentially. To run that test, we do a single `loadtest` call, which creates a data frame of results:
 
