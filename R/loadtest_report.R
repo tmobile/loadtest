@@ -37,9 +37,10 @@ loadtest_report <- function(results, output_file=NULL){
     output_file <- file.path(getwd(),"loadtest_report.html")
     message(paste0("No output file path specified. Saving to: ",output_file))
   }
-  print(output_file)
+
   rmarkdown::render(system.file("report_template.Rmd", package = "loadtest"),
                     output_file = output_file,
+                    intermediates_dir = dirname(output_file),
                     params = list(results=results))
 }
 
