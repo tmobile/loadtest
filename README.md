@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg)](LICENSE)
 
-<img src="man/figures/README-loadtest-hex.png" align="right"  height="120px"/>
+<img src="man/figures/README-loadtest-hex.png" align="right"  height="200px"/>
 
 This package is to make load testing of APIs, such as those created with the R package plumber, easy to do. It uses Apache JMeter on the backend--a modern platform for load testing. The loadtest package is open source and maintained by the AI @ T-Mobile team.
 
