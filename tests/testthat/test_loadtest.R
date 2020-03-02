@@ -56,4 +56,53 @@ test_that("loadtest works with more method/headers/body", {
   expect_is(results, "data.frame")
   expect_equal(nrow(results), threads*loops, label = "Table had invalid number of rows")
   expect_true(all(results$request_status=="Success"),label = "Some requests failed")
+
+  results <- loadtest("https://jsonplaceholder.typicode.com/comments?postId=1&userId=1",
+                      method = "GET",
+                      threads = threads,
+                      loops = loops,
+                      delay_per_request = 250)
+
+  expect_is(results, "data.frame")
+  expect_equal(nrow(results), threads*loops, label = "Table had invalid number of rows")
+  expect_true(all(results$request_status=="Success"),label = "Some requests failed")
+})
+
+test_that("query string is correctly parsed", {
+  query_string <- "postId=1&userId=1&whatever=888"
+  result <- loadtest:::parse_query_string(query_string)
+
+  expect_is(result, "list")
+  expect_equal(names(result), c("postId", "userId", "whatever"))
+  expect_equal(result$postId[[1]], "1")
+  expect_equal(result$userId[[1]], "1")
+  expect_equal(result$whatever[[1]], "888")
+
+  query_string <- "postId=1&userId=1&whatever="
+  expect_warning(loadtest:::parse_query_string(query_string),
+                "The following parameters did not have a value and were dropped: whatever")
+
+  query_string <- "postId=1&userId=1&userId=8"
+  expect_warning(loadtest:::parse_query_string(query_string),
+                 "Duplicate parameters found, using only the first occurence of: userId")
+
+  result <- suppressWarnings(loadtest:::parse_query_string(query_string))
+  expect_equal(names(result), c("postId", "userId"))
+  expect_equal(result$postId[[1]], "1")
+  expect_equal(result$userId[[1]], "1")
+})
+
+test_that("query path is correctly parsed", {
+  expect_equal(
+    loadtest:::parse_url("https://jsonplaceholder.typicode.com/"),
+    list(protocol = "https", domain = "jsonplaceholder.typicode.com",
+         path = "/", port = "443")
+  )
+
+  expect_equal(
+    loadtest:::parse_url("https://jsonplaceholder.typicode.com/comments?postId=1&userId=1"),
+    list(protocol = "https", domain = "jsonplaceholder.typicode.com",
+         path = "/comments", port = "443",
+         query_params = list(postId = "1", userId = "1"))
+  )
 })
