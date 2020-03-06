@@ -113,7 +113,7 @@ parse_url <- function(url){
     query_parameters <- plumber:::parseQS(path_elements[[1]][[2]])
     return(
       list(protocol = protocol, domain = domain, path = path, port = port,
-           query_params = query_parameters)
+           query_parameters = query_parameters)
     )
   }
 

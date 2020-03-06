@@ -103,6 +103,6 @@ test_that("query path is correctly parsed", {
     loadtest:::parse_url("https://jsonplaceholder.typicode.com/comments?postId=1&userId=1"),
     list(protocol = "https", domain = "jsonplaceholder.typicode.com",
          path = "/comments", port = "443",
-         query_params = list(postId = "1", userId = "1"))
+         query_parameters = list(postId = "1", userId = "1"))
   )
 })
