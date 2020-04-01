@@ -28,7 +28,7 @@
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
           {body}
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Query parameters" enabled="true">
-            <collectionProp name="Arguments.arguments">\
+            <collectionProp name="Arguments.arguments">
             {query_parameters}
             </collectionProp>
           </elementProp>

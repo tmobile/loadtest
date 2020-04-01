@@ -186,7 +186,6 @@ loadtest <- function(url,
                      loops = 16,
                      ramp_time = 0,
                      delay_per_request = 0){
-
   invisible(check_java_installed())
   invisible(check_jmeter_installed())
 
