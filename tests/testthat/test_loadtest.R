@@ -68,6 +68,36 @@ test_that("loadtest works with more method/headers/body", {
   expect_true(all(results$request_status=="Success"),label = "Some requests failed")
 })
 
+test_that("loadtest works with nested body", {
+  threads <- 2
+  loops <- 5
+  results <- loadtest("http://httpbin.org/post",
+                      method = "POST",
+                      headers = c("version" = "v1.0"),
+                      body = list(text = list("example text")),
+                      encode = "json",
+                      threads = threads,
+                      loops = loops,
+                      delay_per_request = 250)
+  expect_is(results, "data.frame")
+  expect_equal(nrow(results), threads*loops, label = "Table had invalid number of rows")
+  expect_true(all(results$request_status=="Success"),label = "Some requests failed")
+})
+
+test_that("loadtest works with query parameters", {
+  threads <- 2
+  loops <- 5
+  results <- loadtest("https://jsonplaceholder.typicode.com/comments?postId=1&userId=1",
+                      method = "GET",
+                      threads = threads,
+                      loops = loops,
+                      delay_per_request = 250)
+
+  expect_is(results, "data.frame")
+  expect_equal(nrow(results), threads*loops, label = "Table had invalid number of rows")
+  expect_true(all(results$request_status=="Success"),label = "Some requests failed")
+})
+
 test_that("query string is correctly parsed", {
   query_string <- "postId=1&userId=1&whatever=888"
   result <- loadtest:::parse_query_string(query_string)
