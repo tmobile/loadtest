@@ -27,6 +27,11 @@
       <hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
           {body}
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Query parameters" enabled="true">
+            <collectionProp name="Arguments.arguments">
+            {query_parameters}
+            </collectionProp>
+          </elementProp>
           <stringProp name="HTTPSampler.domain">{domain}</stringProp>
           <stringProp name="HTTPSampler.port">{port}</stringProp>
           <stringProp name="HTTPSampler.protocol">{protocol}</stringProp>

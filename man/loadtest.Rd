@@ -4,10 +4,17 @@
 \alias{loadtest}
 \title{Run a load test of an HTTP request}
 \usage{
-loadtest(url, method = c("GET", "POST", "HEAD", "TRACE", "OPTIONS",
-  "PUT", "DELETE"), headers = NULL, body = NULL, encode = c("raw",
-  "json"), threads = 1, loops = 16, ramp_time = 0,
-  delay_per_request = 0)
+loadtest(
+  url,
+  method = c("GET", "POST", "HEAD", "TRACE", "OPTIONS", "PUT", "DELETE"),
+  headers = NULL,
+  body = NULL,
+  encode = c("raw", "json"),
+  threads = 1,
+  loops = 16,
+  ramp_time = 0,
+  delay_per_request = 0
+)
 }
 \arguments{
 \item{url}{The url to hit as part of the test, such as https://www.t-mobile.com .}
